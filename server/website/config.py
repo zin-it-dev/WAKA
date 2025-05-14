@@ -1,4 +1,4 @@
-import os, cloudinary
+import os
 
 from flask_appbuilder.security.manager import (
     AUTH_OID,
@@ -14,13 +14,19 @@ load_dotenv()
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 # Your App secret key
-SECRET_KEY = "pf47%n$j*n-udq=pdm@8rfx8%=v40ugapeckqrjcd-e^%#x3k*"
+SECRET_KEY = "g%qqd5v6+d)^2h7pt7l1p50+aqw#oy0oax%0f5w!x^xzn%*sc8"
 
 # The SQLAlchemy connection string.
+
 DB_NAME = os.getenv("DB_NAME")
+DB_USERNAME = os.getenv("DB_USERNAME")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_SERVER = os.getenv("DB_SERVER")
 
 SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "database", DB_NAME)
-# SQLALCHEMY_DATABASE_URI = 'mysql://myapp@localhost/myapp'
+# SQLALCHEMY_DATABASE_URI = (
+#     f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}?charset=utf8mb4"
+# )
 # SQLALCHEMY_DATABASE_URI = 'postgresql://root:password@localhost/myapp'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
@@ -31,7 +37,10 @@ CSRF_ENABLED = True
 # ------------------------------
 # GLOBALS FOR APP Builder
 # ------------------------------
+# Uncomment to setup Your App name
 APP_NAME = "WAKA 🔖"
+
+# Uncomment to setup Setup an App icon
 # APP_ICON = "static/img/logo.jpg"
 
 # ----------------------------------------------------
@@ -86,20 +95,30 @@ LANGUAGES = {
 # ---------------------------------------------------
 # Image and file configuration
 # ---------------------------------------------------
+# The file upload folder, when using models with files
 UPLOAD_FOLDER = basedir + "/app/static/uploads/"
+
+# The image upload folder, when using models with images
 IMG_UPLOAD_FOLDER = basedir + "/app/static/uploads/"
+
+# The image upload url, when using models with images
 IMG_UPLOAD_URL = "/static/uploads/"
-FILE_ALLOWED_EXTENSIONS = ("txt", "pdf", "jpeg", "jpg", "gif", "png")
+# Setup image size default is (300, 200, True)
+IMG_SIZE = (300, 200, True)
 
 # Theme configuration
 # these are located on static/appbuilder/css/themes
-# you can create your own and easily use them placing them on the same dir structure to override
 APP_THEME = "slate.css"
 
-# Cloudinary
-cloudinary.config(
-    cloud_name=os.getenv("CLOUDINARY_CLOUD_NAME"),
-    api_key=os.getenv("CLOUDINARY_API_KEY"),
-    api_secret=os.getenv("CLOUDINARY_API_SECRET"),
-    secure=True,
-)
+# Swagger
+FAB_API_SWAGGER_UI = True
+
+# Customize
+FAB_SECURITY_MANAGER_CLASS = "app.security.SecurityManager"
+
+# Mail
+MAIL_SERVER = "smtp.gmail.com"
+MAIL_USE_TLS = True
+MAIL_USERNAME = "yourappemail@gmail.com"
+MAIL_PASSWORD = "passwordformail"
+MAIL_DEFAULT_SENDER = "fabtest10@gmail.com"

@@ -1,22 +1,21 @@
-from flask_appbuilder.charts.views import DirectByChartView, GroupByChartView
+from flask_appbuilder.charts.views import GroupByChartView
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from sqlalchemy.sql import func
 from flask_appbuilder.models.group import aggregate_count
 
 from . import appbuilder
-from .models import Genre, Book
+from .models import Book
 
 
 class BookChartView(GroupByChartView):
-    datamodel = SQLAInterface(Genre)
-    chart_title = "Books per Genre"
+    datamodel = SQLAInterface(Book)
+    chart_title = "Book Statistics"
 
     definitions = [
         {
-            "label": "Books",
-            "group": "name",
+            "label": "Book Count By Genres",
+            "group": "genre.name",
             "series": [
-                (aggregate_count, "books"),
+                (aggregate_count, "title"),
             ],
         }
     ]
@@ -24,7 +23,7 @@ class BookChartView(GroupByChartView):
 
 appbuilder.add_view(
     BookChartView,
-    "Book Statistics",
+    "Book's Statistics",
     icon="fa-dashboard",
     category="Statistics",
     category_icon="fa-chart-bar",

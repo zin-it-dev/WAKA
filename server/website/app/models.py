@@ -1,38 +1,51 @@
-from flask import Markup, url_for
+from flask import Markup
 from flask_appbuilder import Model
+from flask_appbuilder.security.sqla.models import User as FABUser
 from flask_appbuilder.models.mixins import ImageColumn
 from flask_appbuilder.filemanager import ImageManager
-from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Date, Float, Text
+from sqlalchemy import Column, Integer, String, ForeignKey, Date, Boolean, Float, Text, Table
 from sqlalchemy.orm import relationship
-from datetime import datetime
-
-from . import db
+from datetime import date
 
 
 class Base(Model):
     __abstract__ = True
 
-    id = Column(Integer, primary_key=True, autoincrement=True, index=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     is_active = Column(Boolean, default=True)
-    date_created = Column(Date, default=datetime.today().strftime("%Y-%m-%d"))
-    date_updated = Column(
-        Date,
-        default=datetime.today().strftime("%Y-%m-%d"),
-        onupdate=datetime.today().strftime("%Y-%m-%d"),
-    )
+    date_created = Column(Date, default=date.today)
+    date_updated = Column(Date, default=date.today, onupdate=date.today)
 
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
+
+class User(FABUser):
+    __tablename__ = "ab_user"
+
+    avatar = Column(ImageColumn(size=(300, 300, True), thumbnail_size=(30, 30, True)))
+
+    def __repr__(self):
+        return self.username
 
 
 class Genre(Base):
     name = Column(String(80), unique=True)
 
-    books = relationship("Book", backref="genre", lazy="selectin")
-
     def __repr__(self):
         return self.name
+
+
+class Tag(Base):
+    name = Column(String(50), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f"#{self.name}"
+
+
+book_tag = Table(
+    "book_tag",
+    Model.metadata,
+    Column("book_id", Integer, ForeignKey("book.id"), nullable=True),
+    Column("tag_id", Integer, ForeignKey(Tag.id), nullable=True),
+)
 
 
 class Book(Base):
@@ -42,7 +55,9 @@ class Book(Base):
     price = Column(Float, default=0.00)
     quantity = Column(Integer, default=1)
 
-    genre_id = Column(Integer, ForeignKey(Genre.id), nullable=False, index=True)
+    genre_id = Column(Integer, ForeignKey(Genre.id), nullable=False)
+    genre = relationship("Genre")
+    tags = relationship("Tag", secondary=book_tag, backref="book", info={"required": True})
 
     def photo_image(self):
         im = ImageManager()

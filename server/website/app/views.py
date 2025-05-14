@@ -1,21 +1,16 @@
 from flask import render_template
 from flask_appbuilder.models.sqla.interface import SQLAInterface
-from flask_appbuilder import ModelView, ModelRestApi
+from flask_appbuilder import ModelView
 
 from . import appbuilder, db
-from .models import Genre, Book
-from .utils import upload_image
-from .charts import BookChartView
+from .models import Genre, Book, Tag
 
 
-class GenreModelView(ModelView):
-    datamodel = SQLAInterface(Genre)
-
-    label_columns = {"is_active": "Active"}
-    list_columns = ["name", "is_active"]
+class BaseModelView(ModelView):
+    list_columns = ["is_active", "date_created", "date_updated"]
 
 
-class BookModelView(ModelView):
+class BookModelView(BaseModelView):
     datamodel = SQLAInterface(Book)
 
     label_columns = {
@@ -23,21 +18,45 @@ class BookModelView(ModelView):
         "photo_image": "Photo",
         "photo_image_thumbnail": "Photo",
     }
-    list_columns = ["photo_image_thumbnail", "title", "price", "is_active"]
+    list_columns = [
+        "photo_image_thumbnail",
+        "title",
+        "price",
+        "genre",
+    ] + BaseModelView.list_columns
+
+
+class GenreModelView(BaseModelView):
+    datamodel = SQLAInterface(Genre)
+    list_columns = ["name"] + BaseModelView.list_columns
+    related_views = [BookModelView]
+
+
+class TagModelView(BaseModelView):
+    datamodel = SQLAInterface(Tag)
+    list_columns = ["name"] + BaseModelView.list_columns
+    related_views = [BookModelView]
 
 
 appbuilder.add_view(
     GenreModelView,
     "List Genres",
     icon="fa-list",
-    category="Waka Management",
+    category="Management",
     category_icon="fa-layer-group",
 )
 appbuilder.add_view(
     BookModelView,
     "List Books",
     icon="fa-book",
-    category="Waka Management",
+    category="Management",
+    category_icon="fa-layer-group",
+)
+appbuilder.add_view(
+    TagModelView,
+    "List Tags",
+    icon="fa-tag",
+    category="Management",
     category_icon="fa-layer-group",
 )
 
