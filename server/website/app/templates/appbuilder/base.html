@@ -1,0 +1,11 @@
+{% extends "appbuilder/baselayout.html" %} {% block head_js %} {{ super() }}
+<script src="//cdn.ckeditor.com/4.10.0/full-all/ckeditor.js"></script>
+{% endblock %} {% block tail_js %} {{ super() }}
+<script>
+	document.addEventListener('DOMContentLoaded', function () {
+		document.querySelectorAll('.ckeditor').forEach(function (el) {
+			CKEDITOR.replace(el);
+		});
+	});
+</script>
+{% endblock %}

@@ -1,4 +1,4 @@
-import os
+import os, cloudinary
 
 from flask_appbuilder.security.manager import (
     AUTH_OID,
@@ -12,6 +12,10 @@ from dotenv import load_dotenv
 load_dotenv()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
+
+DEBUG = True
+
+DEBUG_TB_INTERCEPT_REDIRECTS = False
 
 # Your App secret key
 SECRET_KEY = "g%qqd5v6+d)^2h7pt7l1p50+aqw#oy0oax%0f5w!x^xzn%*sc8"
@@ -116,9 +120,9 @@ FAB_API_SWAGGER_UI = True
 # Customize
 FAB_SECURITY_MANAGER_CLASS = "app.security.SecurityManager"
 
-# Mail
-MAIL_SERVER = "smtp.gmail.com"
-MAIL_USE_TLS = True
-MAIL_USERNAME = "yourappemail@gmail.com"
-MAIL_PASSWORD = "passwordformail"
-MAIL_DEFAULT_SENDER = "fabtest10@gmail.com"
+# Cloudinary
+cloudinary.config(
+    cloud_name=os.getenv("CLOUD_NAME"),
+    api_key=os.getenv("API_KEY"),
+    api_secret=os.getenv("API_SECRET"),
+)

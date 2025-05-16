@@ -12,7 +12,7 @@ from .paginators import (
 
 class BaseRestApi(ModelRestApi):
     allow_browser_login = True
-    list_columns = ["id", "is_active"]
+    list_columns = ["id", "active"]
     base_order = ["id", "desc"]
     base_permissions = ["can_get"]
     page_size = StandardResultsSetPagination.page_size
@@ -33,7 +33,7 @@ class BookRestApi(BaseRestApi):
     list_columns = BaseRestApi.list_columns + [
         "title",
         "price",
-        "image",
+        "thumbnail",
         "quantity",
         "genre.name",
         "tags.name",
