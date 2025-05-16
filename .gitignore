@@ -72,4 +72,4 @@ expo-env.d.ts
 *.pem
 
 # === Environment ===
-.env*.local
+.env
