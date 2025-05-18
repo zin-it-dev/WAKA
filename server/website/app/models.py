@@ -2,36 +2,22 @@ import enum
 
 from flask import Markup
 from flask_appbuilder import Model
-from flask_appbuilder.models.mixins import ImageColumn
-from flask_appbuilder.filemanager import ImageManager
-from flask_appbuilder.security.sqla.models import User as FABUser
-from sqlalchemy import (
-    Column,
-    Integer,
-    String,
-    ForeignKey,
-    Boolean,
-    Float,
-    Text,
-    Table,
-    Enum,
-    DateTime,
-)
+from flask_appbuilder.models.mixins import AuditMixin
+from flask_appbuilder.security.sqla.models import User
+from sqlalchemy import Column, Integer, String, ForeignKey, Boolean, Float, Text, Table, Enum
 from sqlalchemy.orm import relationship
-from datetime import datetime
 
 from .utils import gravatar_url
 
 
-class Base(Model):
+class Base(Model, AuditMixin):
     __abstract__ = True
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     active = Column(Boolean, default=True)
-    date_created = Column(DateTime, default=lambda: datetime.now(), nullable=True)
 
 
-class User(FABUser):
+class CustomUser(User):
     __tablename__ = "ab_user"
 
     avatar = Column(
@@ -78,7 +64,10 @@ class BookType(enum.Enum):
 
 class Book(Base):
     title = Column(String(100), unique=True, nullable=False)
-    image = Column(ImageColumn(size=(300, 300, True), thumbnail_size=(30, 30, True)), nullable=True)
+    image = Column(
+        String(255),
+        default="https://placehold.co/300",
+    )
     description = Column(Text)
     price = Column(Float, default=0.00)
     quantity = Column(Integer, default=1)
@@ -93,23 +82,9 @@ class Book(Base):
     genre = relationship("Genre")
     tags = relationship("Tag", secondary=book_tag, backref="book", info={"required": True})
 
-    def thumbnail(self):
-        return ImageManager().get_url(self.image) if self.image else "https://placehold.co/300"
-
     def photo_image(self):
-        url = ImageManager().get_url(self.image) if self.image else "https://placehold.co/300"
         return Markup(
-            f'<img src="{url}" alt="{self.title}" class="img-thumbnail img-rounded img-responsive" />'
-        )
-
-    def photo_image_thumbnail(self):
-        url = (
-            ImageManager().get_url_thumbnail(self.image)
-            if self.image
-            else "https://placehold.co/30"
-        )
-        return Markup(
-            f'<img src="{url}" alt="{self.title}" class="img-thumbnail img-rounded img-responsive"/>'
+            f'<img src="{self.image}" alt="{self.title}" class="img-thumbnail img-rounded img-responsive" />'
         )
 
     def __repr__(self):

@@ -1,0 +1,22 @@
+[
+	{
+		"title": "Giới thiệu Luật Dân Sự",
+		"genre_id": 1,
+		"price": 120000
+	},
+	{
+		"title": "Python cơ bản",
+		"genre_id": 2,
+		"price": 95000
+	},
+	{
+		"title": "Tôi thấy hoa vàng trên cỏ xanh",
+		"genre_id": 3,
+		"price": 75000
+	},
+	{
+		"title": "Nghĩ Giàu Làm Giàu",
+		"genre_id": 4,
+		"price": 130000
+	}
+]

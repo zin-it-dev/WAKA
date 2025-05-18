@@ -6,9 +6,8 @@ from .models import Book
 
 
 class BaseInline(CompactCRUDMixin, ModelView):
-    add_exclude_columns = ["date_created"]
-    edit_exclude_columns = ["date_created"]
-    list_columns = ["active", "date_created"]
+    add_exclude_columns = edit_exclude_columns = ["created_on", "changed_on"]
+    list_columns = ["active"]
     list_widget = ListBlock
 
 

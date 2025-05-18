@@ -17,10 +17,7 @@ DEBUG = True
 
 DEBUG_TB_INTERCEPT_REDIRECTS = False
 
-# Your App secret key
 SECRET_KEY = "g%qqd5v6+d)^2h7pt7l1p50+aqw#oy0oax%0f5w!x^xzn%*sc8"
-
-# The SQLAlchemy connection string.
 
 DB_NAME = os.getenv("DB_NAME")
 DB_USERNAME = os.getenv("DB_USERNAME")
@@ -31,7 +28,6 @@ SQLALCHEMY_DATABASE_URI = "sqlite:///" + os.path.join(basedir, "database", DB_NA
 # SQLALCHEMY_DATABASE_URI = (
 #     f"mysql+pymysql://{DB_USERNAME}:{DB_PASSWORD}@{DB_SERVER}/{DB_NAME}?charset=utf8mb4"
 # )
-# SQLALCHEMY_DATABASE_URI = 'postgresql://root:password@localhost/myapp'
 
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 
@@ -50,11 +46,6 @@ APP_NAME = "WAKA 🔖"
 # ----------------------------------------------------
 # AUTHENTICATION CONFIG
 # ----------------------------------------------------
-# The authentication type
-# AUTH_OID : Is for OpenID
-# AUTH_DB : Is for database (username/password()
-# AUTH_LDAP : Is for LDAP
-# AUTH_REMOTE_USER : Is for using REMOTE_USER from web server
 AUTH_TYPE = AUTH_DB
 
 # Uncomment to setup Full admin role name
@@ -64,20 +55,8 @@ AUTH_ROLE_ADMIN = "Admin"
 AUTH_ROLE_PUBLIC = "Public"
 
 # Will allow user self registration
-AUTH_USER_REGISTRATION = True
+AUTH_USER_REGISTRATION = False
 
-# The default user self registration role
-AUTH_USER_REGISTRATION_ROLE = "Public"
-
-# When using LDAP Auth, setup the ldap server
-# AUTH_LDAP_SERVER = "ldap://ldapserver.new"
-
-# Uncomment to setup OpenID providers example for OpenID authentication
-# OPENID_PROVIDERS = [
-#    { 'name': 'Yahoo', 'url': 'https://me.yahoo.com' },
-#    { 'name': 'AOL', 'url': 'http://openid.aol.com/<username>' },
-#    { 'name': 'Flickr', 'url': 'http://www.flickr.com/<username>' },
-#    { 'name': 'MyOpenID', 'url': 'https://www.myopenid.com' }]
 # ---------------------------------------------------
 # Babel config for translations
 # ---------------------------------------------------
@@ -96,19 +75,6 @@ LANGUAGES = {
     "ru": {"flag": "ru", "name": "Russian"},
     "pl": {"flag": "pl", "name": "Polish"},
 }
-# ---------------------------------------------------
-# Image and file configuration
-# ---------------------------------------------------
-# The file upload folder, when using models with files
-UPLOAD_FOLDER = basedir + "/app/static/uploads/"
-
-# The image upload folder, when using models with images
-IMG_UPLOAD_FOLDER = basedir + "/app/static/uploads/"
-
-# The image upload url, when using models with images
-IMG_UPLOAD_URL = "/static/uploads/"
-# Setup image size default is (300, 200, True)
-IMG_SIZE = (300, 200, True)
 
 # Theme configuration
 # these are located on static/appbuilder/css/themes

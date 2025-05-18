@@ -13,18 +13,22 @@ from .paginators import (
 class BaseRestApi(ModelRestApi):
     allow_browser_login = True
     list_columns = ["id", "active"]
-    base_order = ["id", "desc"]
-    base_permissions = ["can_get"]
     page_size = StandardResultsSetPagination.page_size
 
 
 class GenreRestApi(BaseRestApi):
-    exclude_route_methods = ["get", "put", "post", "delete", "info"]
-
     resource_name = "genres"
     datamodel = SQLAInterface(Genre)
     list_columns = BaseRestApi.list_columns + ["name"]
-    page_size = 0
+
+    exclude_route_methods = ["get", "put", "post", "delete", "info"]
+    openapi_spec_methods = {
+        "get_list": {
+            "get": {
+                "description": "Get all genres",
+            }
+        }
+    }
 
 
 class BookRestApi(BaseRestApi):
@@ -33,7 +37,7 @@ class BookRestApi(BaseRestApi):
     list_columns = BaseRestApi.list_columns + [
         "title",
         "price",
-        "thumbnail",
+        "image",
         "quantity",
         "genre.name",
         "tags.name",
